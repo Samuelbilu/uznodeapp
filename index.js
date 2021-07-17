@@ -1,17 +1,21 @@
+const { render } = require("ejs");
+const favicon = require("serve-favicon")
+const path = require('path')
 const express = require("express");
 const app = express();
 
-const port = 80
+const port = 3000
 
 app.get("/", (req, res) => {
-    res.render("index.ejs")
+    render("index.ejs")
 });
 
 app.get("/login", (req, res) => {
-    res.render("login.ejs")
+    render("login.ejs")
 });
 
+app.use(favicon(path.join(__dirname, 'favicon.ico')))
 
-app.listen(port, () =>{
-    console.log("Listening")
+app.listen(process.env.PORT || port, () =>{
+    console.log("Express server listening")
 });

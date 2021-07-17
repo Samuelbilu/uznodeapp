@@ -1,10 +1,11 @@
 const { render } = require("ejs");
-const favicon = require("serve-favicon")
-const path = require('path')
+const dotenv = require("dotenv").config();
+const favicon = require("serve-favicon");
+const path = require('path');
 const express = require("express");
 const app = express();
 
-const port = 3000
+const port = 80
 
 app.get("/", (req, res) => {
     render("index.ejs")

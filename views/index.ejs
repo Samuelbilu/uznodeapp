@@ -53,6 +53,12 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var name = window.prompt("Your nickname:")
+
+        if(name == ""){
+            alert("Please retry!");
+            location.reload();
+        };
+
         var socket = io();
 
         var messages = document.getElementById('messages');

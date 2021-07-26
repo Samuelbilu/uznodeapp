@@ -17,8 +17,9 @@ router.post("/login", (req, res) => {
     const { username, password} = req.body;
 
     verifyUser(username, password);
-
-    res.send("logged")
+    if(verifyUser){
+        res.send("logged")
+    }
 });
 
 router.get("/register", (req, res) => {

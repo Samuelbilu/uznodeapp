@@ -19,13 +19,15 @@ const port = 80;
 //io
 
 io.on('connection', (socket) => {
-    socket.broadcast.emit('hi');
-});
 
-io.on('connection', (socket) => {
+    socket.on("userConnected", (name) =>{
+        io.emit("userConnected", name)
+    })
+
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg);
     });
+    
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 

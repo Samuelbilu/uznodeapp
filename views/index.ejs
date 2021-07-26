@@ -36,6 +36,13 @@
             background-color: rgb(180, 180, 180);
             font-size: 20px;
         }
+        .namep2{
+            margin:0;
+            padding: 0.5rem 1rem;
+            color: rgb(10, 10, 10);
+            background-color: rgb(116, 116, 116);
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +52,7 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var name = window.prompt("Your username:")
+        var name = window.prompt("Your nickname:")
         var socket = io();
 
         var messages = document.getElementById('messages');
@@ -61,6 +68,19 @@
                 });
                 input.value = '';
             }
+        });
+
+        socket.emit("userConnected", {
+            name: name
+        });
+
+        socket.on("userConnected", function(obj){
+            var nickname = document.createElement('p');
+            nickname.className = "namep2"
+            nickname.textContent = obj.name + " has entered in the chat";
+
+            messages.appendChild(nickname);
+            window.scrollTo(0, document.body.scrollHeight);
         });
 
         socket.on('chat message', function(obj) {

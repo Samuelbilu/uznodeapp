@@ -6,6 +6,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app)
 
+app.use(require("./routes/index"));
 //socket.io
 
 const { Server } = require("socket.io");
@@ -13,21 +14,7 @@ const io = new Server(server);
 
 //variaveis
 
-const port = 80
-
-//Páginas normais
-
-app.get("/", (req, res) => {
-    res.render("index.ejs")
-});
-
-app.get("/login", (req, res) => {
-    res.render("login.ejs")
-});
-
-app.get("/register", (req, res) => {
-    res.render("register.ejs")
-});
+const port = 80;
 
 //io
 
@@ -40,12 +27,12 @@ io.on('connection', (socket) => {
       io.emit('chat message', msg);
     });
 });
-io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
+// io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 
 //universal
 
-app.use(favicon(path.join(__dirname, 'favicon.ico')))
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
 server.listen(process.env.PORT || port, () =>{
-    console.log("Express server listening")
+    console.log("Express server listening");
 });

@@ -2,9 +2,14 @@
 const favicon = require("serve-favicon");
 const path = require('path');
 const express = require('express');
+const bodyparser = require('body-parser');
 const app = express();
 const http = require('http');
 const server = http.createServer(app)
+
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: true}));
 
 app.use(require("./routes/index"));
 //socket.io
@@ -27,7 +32,7 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg);
     });
-    
+
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 

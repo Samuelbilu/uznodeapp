@@ -3,7 +3,7 @@ const router = Router();
 
 //usuários
 
-const { createUser, verifyUser, users } = require("../controllers/index.controller");
+//const { createUser, verifyUser, users } = require("../controllers/index.controller");
 
 router.get("/", (req, res) => {
     res.render("index.ejs");
@@ -24,16 +24,17 @@ router.get("/login", (req, res) => {
 });*/
 
 router.get("/register", (req, res) => {
-    res.render("register.ejs");
+    //res.render("register.ejs");
+    res.send("pagina em teste")
 });
 
 router.post("/register", (req, res) => {
-    const { username, password} = req.body;
+    //const { username, password} = req.body;
 
-    createUser(username, password);
+    //createUser(username, password);
 });
 
-router.get("/users", users)
+//router.get("/users", users)
 
 
 

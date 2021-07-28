@@ -1,4 +1,4 @@
-const { Pool } = require("pg");
+/*const { Pool } = require("pg");
 
 var config = {
     user: process.env.DB_USER || "postgres",
@@ -36,7 +36,7 @@ const verifyUser = async (user, pass) => {
 };
 
 const users = async (req, res) => {
-    const response = await pool.query("SELECT * FROM users");
+    const response = await pool.query("SELECT * FROM " + process.env.DB);
     
     res.send(response)
 };
@@ -44,6 +44,6 @@ const users = async (req, res) => {
 
 module.exports = {
     createUser,
-    verifyUser,
+    //verifyUser,
     users
-}
+}*/

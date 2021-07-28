@@ -30,9 +30,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
+        io.emit('chat message', msg);
     });
-
+    io.on('disconnect', (socket)=>{
+        socket.on('userDisconnected', (name) =>{
+            io.emit("userDisconnected", name);
+        });
+    })
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 

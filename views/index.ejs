@@ -21,7 +21,7 @@
     <style>
         body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
   
-        #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+        #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 15%; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
         #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
         #input:focus { outline: none; }
         #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
@@ -43,9 +43,25 @@
             background-color: rgb(255, 255, 255);
             font-size: 25px;
         }
+        #usersOnline{
+            position: fixed;
+            width: 15%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.15);
+            bottom: 0;
+            left: 0;
+        }
+        .usersH1{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+    <div id="usersOnline">
+        <h1 class="usersH1">Users</h1>
+        <ul id="users"></ul>
+    </div>
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -54,14 +70,15 @@
     <script>
         var name = window.prompt("Your nickname:")
 
-        if(name == ""){
-            alert("Please retry!");
+        if(name == null){
+            alert("Please insert a valid name!");
             location.reload();
         };
 
         var socket = io();
 
         var messages = document.getElementById('messages');
+        var users = document.getElementById('users');
         var form = document.getElementById('form');
         var input = document.getElementById('input');
 
@@ -80,13 +97,31 @@
             name: name
         });
 
-        socket.on("userConnected", function(obj){
-            var nickname = document.createElement('p');
-            nickname.className = "namep2"
-            nickname.textContent = obj.name + " has entered in the chat";
+        socket.emit("userDisconnected", {
+            name: name
+        });
 
-            messages.appendChild(nickname);
+        socket.on("userConnected", function(obj){
+            var newUser = document.createElement('p');
+
+            localStorage.setItem('oisjdof928o42n33o98H98h78hNISUFISAPOKDF', obj.name)
+
+            newUser.id = obj.name
+            newUser.textContent = localStorage.getItem('oisjdof928o42n33o98H98h78hNISUFISAPOKDF');
+
+
+
+            users.appendChild(newUser);
             window.scrollTo(0, document.body.scrollHeight);
+
+            console.log('user connected: ' + obj.name)
+        });
+
+        socket.on("userDisconnected", function(obj){
+            var userThatDoThings = document.getElementById(obj.name)
+
+            userThatDoThings.textContent = ""
+            console.log('user disconnected: ' + obj.name)
         });
 
         socket.on('chat message', function(obj) {

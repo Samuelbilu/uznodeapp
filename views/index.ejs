@@ -70,17 +70,19 @@
     <script>
         var name = window.prompt("Your nickname:")
 
-        if(name == null){
+        if(name == null || ""){
             alert("Please insert a valid name!");
             location.reload();
         };
 
+
         var socket = io();
 
         var messages = document.getElementById('messages');
-        var users = document.getElementById('users');
+        var usersUl = document.getElementById('users');
         var form = document.getElementById('form');
         var input = document.getElementById('input');
+
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -93,35 +95,25 @@
             }
         });
 
-        socket.emit("userConnected", {
-            name: name
-        });
-
-        socket.emit("userDisconnected", {
-            name: name
-        });
+        socket.emit('userConnected',{userId: name});
 
         socket.on("userConnected", function(obj){
             var newUser = document.createElement('p');
-
-            localStorage.setItem('oisjdof928o42n33o98H98h78hNISUFISAPOKDF', obj.name)
-
-            newUser.id = obj.name
-            newUser.textContent = localStorage.getItem('oisjdof928o42n33o98H98h78hNISUFISAPOKDF');
+            newUser.textContent = obj[userId]
 
 
-
-            users.appendChild(newUser);
+            usersUl.appendChild(newUser);
             window.scrollTo(0, document.body.scrollHeight);
 
-            console.log('user connected: ' + obj.name)
+            console.log('user ' + obj[userId] + ' connected');
+            users[socket.id] = userId;
+            console.log(users)
         });
 
-        socket.on("userDisconnected", function(obj){
-            var userThatDoThings = document.getElementById(obj.name)
-
-            userThatDoThings.textContent = ""
-            console.log('user disconnected: ' + obj.name)
+        socket.on('disconnection', (obj)=>{
+            
+            console.log('user ' + users[socket.id] + ' disconnected');
+            delete users[socket.id];
         });
 
         socket.on('chat message', function(obj) {

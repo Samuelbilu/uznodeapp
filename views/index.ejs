@@ -121,7 +121,7 @@
             let item = document.createElement('li');
             item.textContent = obj.message;
             
-            if(obj.message ==  "@" + obj.nick){
+            if(item.contains("@")){
                 item.style == "background-color: yellow;"
             }
 

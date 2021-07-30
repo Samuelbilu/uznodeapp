@@ -34,7 +34,8 @@ mongoose.connect(mongoDB || 'mongodb://localhost/chatdb', { useNewUrlParser: tru
 
 //socket.io
 
-const users = {};
+const users = [];
+const msgs = [];
 
 io.on('connection', (socket) => {
 
@@ -46,11 +47,12 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         //const messagedb = new Msg({msg});
         //messagedb.save().then(()=>{
-        io.emit('chat message', msg);
+        msgs[msg.nick] = msg;
+        io.emit('chat message', { msgsVar: msgs[msg.nick] })
         //}).catch(err =>{
         //    console.log("o erro foi: " + err)
         //});
-        console.log(msg)
+        console.log(msgs)
     });
 
 

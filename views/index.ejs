@@ -116,14 +116,10 @@
         socket.on('chat message', function(obj) {
             let nameP = document.createElement('p');
             nameP.className = "namep"
-            nameP.textContent = obj.nick + ":";
+            nameP.textContent = obj.msgsVar.nick + ":";
             
             let item = document.createElement('li');
-            item.textContent = obj.message;
-            
-            if(item.contains("@")){
-                item.style == "background-color: yellow;"
-            }
+            item.textContent = obj.msgsVar.message;
 
             messages.appendChild(nameP);
             messages.appendChild(item);

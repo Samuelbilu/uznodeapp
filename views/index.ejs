@@ -88,38 +88,35 @@
             e.preventDefault();
             if  (input.value) {
                 socket.emit('chat message', {
-                    name: name,
+                    nick: name,
                     message: input.value
                 });
                 input.value = '';
             }
         });
 
-        socket.emit('userConnected',{userId: name});
+        socket.emit('userConnected', name);
 
-        socket.on("userConnected", function(obj){
+        socket.on("displayUsers", function(obj){
+            
             var newUser = document.createElement('p');
-            newUser.textContent = obj[userId]
-
+            newUser.textContent = obj.usersVar
+            newUser.id = obj.usersVar
 
             usersUl.appendChild(newUser);
-            window.scrollTo(0, document.body.scrollHeight);
 
-            console.log('user ' + obj[userId] + ' connected');
-            users[socket.id] = userId;
-            console.log(users)
         });
 
-        socket.on('disconnection', (obj)=>{
-            
-            console.log('user ' + users[socket.id] + ' disconnected');
-            delete users[socket.id];
+        socket.on('disconnection', function (obj) {
+            var userName = document.getElementById(obj.usersVar)
+
+            userName.textContent = ""
         });
 
         socket.on('chat message', function(obj) {
             var nameP = document.createElement('p');
             nameP.className = "namep"
-            nameP.textContent = obj.name + ":";
+            nameP.textContent = obj.nick + ":";
             
             var item = document.createElement('li');
             item.textContent = obj.message;

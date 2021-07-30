@@ -23,46 +23,49 @@ const io = new Server(server);
 
 const port = 80;
 const mongoDB = 'mongodb+srv://samuz0:uz0reinando@firstcluster.gpdqi.mongodb.net/chatdb?retryWrites=true&w=majority'
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
+
+//mongo
+
+mongoose.connect(mongoDB || 'mongodb://localhost/chatdb', { useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
     console.log('mongodb connected');
 }).catch((err) => { 
     console.log("erro: " + err); 
 });
 
-
-//io
+//socket.io
 
 const users = {};
 
 io.on('connection', (socket) => {
 
-    socket.on("userConnected", (userId) =>{
-        io.emit('userConnected', { userId, users })
+    socket.on("userConnected", (nick) =>{
+        users[socket.id] = nick;
+        io.emit('displayUsers', { usersVar: users[socket.id] })
     })
 
     socket.on('chat message', (msg) => {
-        const message = new Msg({msg});
-        message.save().then(()=>{
-            io.emit('chat message', msg);
-        });
+        //const messagedb = new Msg({msg});
+        //messagedb.save().then(()=>{
+        io.emit('chat message', msg);
+        //}).catch(err =>{
+        //    console.log("o erro foi: " + err)
+        //});
+        console.log(msg)
     });
+
+
     socket.on('disconnect', function(){
-        console.log('user ' + users[socket.id] + ' disconnected');
-        delete users[socket.id];
-
-        io.emit('disconnection', users)
-
+        io.emit('disconnection', { usersVar: users[socket.id] })
+        delete users[socket.id]
     });
 
-    
+    setInterval(() => {
+        console.log(users)
+    }, 1000);
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 
 //universal
-
-module.exports = {
-    users
-}
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 

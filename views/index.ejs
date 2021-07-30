@@ -114,13 +114,17 @@
         });
 
         socket.on('chat message', function(obj) {
-            var nameP = document.createElement('p');
+            let nameP = document.createElement('p');
             nameP.className = "namep"
             nameP.textContent = obj.nick + ":";
             
-            var item = document.createElement('li');
+            let item = document.createElement('li');
             item.textContent = obj.message;
             
+            if(obj.message ==  "@" + obj.nick){
+                item.backgroud-color == yellow
+            }
+
             messages.appendChild(nameP);
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);

@@ -60,7 +60,7 @@
 <body>
     <div id="usersOnline">
         <h1 class="usersH1">Users</h1>
-        <ul id="users"></ul>
+        <ul id="users">*/*testando*/*</ul>
     </div>
     <ul id="messages"></ul>
     <form id="form" action="">
@@ -68,7 +68,7 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var name = window.prompt("Your nickname:")
+        var name = window.prompt("Your username:")
 
         if(name == null){
             alert("Please insert a valid name!");
@@ -88,14 +88,33 @@
             e.preventDefault();
             if  (input.value) {
                 socket.emit('chat message', {
-                    nick: name,
-                    message: input.value
+                    username: name,
+                    msgstring: input.value
                 });
                 input.value = '';
             }
         });
 
-        socket.emit('userConnected', name);
+        socket.emit('userConnected', {username: name});
+
+        socket.on('output-messages', data => {
+            console.log(data)
+            if (data.length) {
+                data.forEach(message => {
+                    appendUsers(message.username)
+                    appendMessages(message.msgstring)
+                });
+            };
+        });
+
+        /*socket.on('output-users', data => {
+            console.log(data)
+            if (data.length) {
+                data.forEach(message => {
+                    appendUsersTab(message.username)
+                });
+            };
+        });
 
         socket.on("displayUsers", function(obj){
             
@@ -105,7 +124,7 @@
 
             usersUl.appendChild(newUser);
 
-        });
+        });*/
 
         socket.on('disconnection', function (obj) {
             var userName = document.getElementById(obj.usersVar)
@@ -116,15 +135,31 @@
         socket.on('chat message', function(obj) {
             let nameP = document.createElement('p');
             nameP.className = "namep"
-            nameP.textContent = obj.msgsVar.nick + ":";
+            nameP.textContent = obj.username + ":";
             
             let item = document.createElement('li');
-            item.textContent = obj.msgsVar.message;
+            item.textContent = obj.msgstring
 
             messages.appendChild(nameP);
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
+
+        function appendUsersTab(message) {
+            const html = `<p>${message}:</p>`
+            usersUl.innerHTML += html
+        }
+
+        function appendUsers(message) {
+            const html = `<p class="namep">${message}:</p>`
+            messages.innerHTML += html
+        }
+        
+
+        function appendMessages(message) {
+            const html = `<p style=" padding:0.5rem 1rem; ">${message}</p>`
+            messages.innerHTML += html
+        }
     </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const { Msg } = require('./models/message');
+//const { User } = require('./models/user');
 const app = express();
 const http = require('http');
 const server = http.createServer(app)
@@ -34,36 +35,45 @@ mongoose.connect(mongoDB || 'mongodb://localhost/chatdb', { useNewUrlParser: tru
 
 //socket.io
 
-const users = [];
-const msgs = [];
 
 io.on('connection', (socket) => {
 
-    socket.on("userConnected", (nick) =>{
-        users[socket.id] = nick;
-        io.emit('displayUsers', { usersVar: users[socket.id] })
+    Msg.find().then(result => {
+        socket.emit('output-messages', result)
     })
 
-    socket.on('chat message', (msg) => {
-        //const messagedb = new Msg({msg});
-        //messagedb.save().then(()=>{
-        msgs[msg.nick] = msg;
-        io.emit('chat message', { msgsVar: msgs[msg.nick] })
-        //}).catch(err =>{
-        //    console.log("o erro foi: " + err)
-        //});
-        console.log(msgs)
+    /*User.find().then(result => {
+        socket.emit('output-users', result)
+    })*/
+
+    socket.on('userConnected', (data) => {
+        /*const userdb = new User({
+            username: data.username
+        });
+        userdb.save().then(()=>{
+            io.emit('displayUsers', data)
+        }).catch(err =>{
+            console.log("o erro foi: " + err)
+        });*/
+        console.log(data)
+    });
+
+    socket.on('chat message', (data) => {
+        const messagedb = new Msg({
+            username: data.username,
+            msgstring: data.msgstring
+        });
+        messagedb.save().then(()=>{
+            io.emit('chat message', data)
+        }).catch(err =>{
+            console.log("o erro foi: " + err)
+        });
+        console.log(data)
     });
 
 
     socket.on('disconnect', function(){
-        io.emit('disconnection', { usersVar: users[socket.id] })
-        delete users[socket.id]
     });
-
-    setInterval(() => {
-        console.log(users)
-    }, 1000);
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 

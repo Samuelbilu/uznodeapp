@@ -59,8 +59,8 @@
 </head>
 <body>
     <div id="usersOnline">
-        <h1 class="usersH1">Users</h1>
-        <ul id="users">*/*testando*/*</ul>
+        <h1 class="usersH1" id="usersH1"></h1>
+        <ul id="users"></ul>
     </div>
     <ul id="messages"></ul>
     <form id="form" action="">
@@ -80,6 +80,7 @@
 
         var messages = document.getElementById('messages');
         var usersUl = document.getElementById('users');
+        var usersTitle = document.getElementById('usersH1');
         var form = document.getElementById('form');
         var input = document.getElementById('input');
 
@@ -96,6 +97,7 @@
         });
 
         socket.emit('userConnected', {username: name});
+        socket.emit('disconnection', {username: name});
 
         socket.on('output-messages', data => {
             console.log(data)
@@ -114,22 +116,23 @@
                     appendUsersTab(message.username)
                 });
             };
-        });
-
-        socket.on("displayUsers", function(obj){
-            
-            var newUser = document.createElement('p');
-            newUser.textContent = obj.usersVar
-            newUser.id = obj.usersVar
-
-            usersUl.appendChild(newUser);
-
         });*/
 
-        socket.on('disconnection', function (obj) {
-            var userName = document.getElementById(obj.usersVar)
+        socket.on("displayUsers", function(data){
+            let county = Object.keys(data.users).length
 
-            userName.textContent = ""
+            usersTitle.textContent = 'Users (' + [county + 1] + ')'; 
+            //usersUl.textContent = '' + data.users + ''; 
+            usersUl.textContent = Object.values(data.users)
+        });
+
+        socket.on('disconnection', function(data) {
+            let county = Object.keys(data.users).length
+
+            usersTitle.textContent = 'Users (' + [county] + ')'; 
+
+
+            console.log(data.users)
         });
 
         socket.on('chat message', function(obj) {

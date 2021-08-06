@@ -36,6 +36,9 @@ mongoose.connect(mongoDB || 'mongodb://localhost/chatdb', { useNewUrlParser: tru
 //socket.io
 
 
+
+const users = {};
+
 io.on('connection', (socket) => {
 
     Msg.find().then(result => {
@@ -55,7 +58,13 @@ io.on('connection', (socket) => {
         }).catch(err =>{
             console.log("o erro foi: " + err)
         });*/
-        console.log(data)
+
+        io.emit('displayUsers', { users: users })
+
+
+        users[socket.id] = data.username
+
+        console.log(users)
     });
 
     socket.on('chat message', (data) => {
@@ -72,12 +81,23 @@ io.on('connection', (socket) => {
     });
 
 
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function() {
+        try{
+            delete users[socket.id]
+            io.emit('disconnection', {users: users})
+        }
+        catch(err){
+            console.log(err)
+        }
+        console.log(users)
     });
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 
 //universal
+
+
+
 
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 

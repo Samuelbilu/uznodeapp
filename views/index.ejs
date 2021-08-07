@@ -85,6 +85,9 @@
         var input = document.getElementById('input');
 
 
+
+        window.scrollTo(0, document.body.scrollHeight);
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if  (input.value) {
@@ -117,11 +120,6 @@
                 });
             };
         });*/
-
-        socket.on("connection", ()=>{
-            window.scrollTo(0, document.body.scrollHeight);
-        });
-
 
         socket.on("displayUsers", function(data){
             let county = Object.keys(data.users).length

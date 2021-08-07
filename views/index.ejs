@@ -106,9 +106,10 @@
                 data.forEach(message => {
                     appendUsers(message.username)
                     appendMessages(message.msgstring)
-                    appendAlertMessages()
+                    
                 });
             };
+            appendAlertMessages()
             window.scrollTo(0, document.body.scrollHeight);
 
         });
@@ -182,7 +183,7 @@
         }
 
         function appendAlertMessages() {
-            const html = `<h3 style=" background-color: rgb(180, 180, 180); ">↑ Mensagens antigas ↑</h3>`
+            const html = `<h3 class="namep">↑ Mensagens antigas ↑</h3>`
             messages.innerHTML += html
         }
     </script>

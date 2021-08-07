@@ -108,8 +108,10 @@
                     appendMessages(message.msgstring)
                     
                 });
-                appendAlertMessages()
-            };
+                appendAlertMessages1()
+            }else{
+                appendAlertMessages2()
+            }
             
             window.scrollTo(0, document.body.scrollHeight);
 
@@ -183,8 +185,13 @@
             messages.innerHTML += html
         }
 
-        function appendAlertMessages() {
+        function appendAlertMessages1() {
             const html = `<h3 class="namep">↑ Mensagens antigas ↑</h3>`
+            messages.innerHTML += html
+        }
+
+        function appendAlertMessages2() {
+            const html = `<h3 class="namep">↓ Seja o primeiro a mandar uma mensagem! ↓</h3>`
             messages.innerHTML += html
         }
     </script>

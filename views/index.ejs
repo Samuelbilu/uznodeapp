@@ -120,28 +120,31 @@
 
         socket.on("displayUsers", function(data){
             let county = Object.keys(data.users).length
-            //let usersValues = Object.values(data.users)
+            let usersValues = Object.values(data.users)
 
             usersTitle.textContent = 'Users (' + county + ')'; 
             //usersUl.textContent = '' + data.users + '';
 
-            usersUl.textContent =  Object.values(data.users);
+            //usersUl.textContent =  Object.values(data.users);
+            
+            usersUl.textContent = ""
 
-            //console.log(usersValues);
+            usersValues.forEach(appendUsersTab)
 
-            alert(data.userWhoConnected + ' entrou no chat')
 
         });
 
         socket.on('disconnection', function(data) {
             let county = Object.keys(data.users).length
+            let usersValues = Object.values(data.users)
 
-            usersTitle.textContent = 'Users (' + [county] + ')'; 
+            usersTitle.textContent = ''; 
 
+            usersTitle.textContent = 'Users (' + county + ')'; 
 
-            console.log(data.users)
+            usersUl.textContent = ""
 
-            //alert(data.userWhoDisconnected + ' saiu do chat')
+            usersValues.forEach(appendUsersTab)
 
         });
 
@@ -158,8 +161,8 @@
             window.scrollTo(0, document.body.scrollHeight);
         });
 
-        function appendUsersTab(message) {
-            const html = `<p>${message}:</p>`
+        function appendUsersTab(item) {
+            const html = item + '<br>'
             usersUl.innerHTML += html
         }
 

@@ -61,11 +61,10 @@ io.on('connection', (socket) => {
 
         users[socket.id] = data.username
 
-        socket.emit('displayUsers', { users: users, userWhoConnected: data.username })
+        io.emit('displayUsers', { users: users, userWhoConnected: data.username })
 
         
 
-        //console.log(io.sockets.sockets)
     });
 
 
@@ -87,8 +86,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', function() {
         try{
             delete users[socket.id]
-        socket.emit('disconnection', { users: users/*, userWhoDisconnected: data.username*/ })
-        //io.emit('disconnection', {users: users})
+            io.emit('disconnection', { users: users})
         }
         catch(err){
             console.log(err)

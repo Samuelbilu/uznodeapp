@@ -120,10 +120,17 @@
 
         socket.on("displayUsers", function(data){
             let county = Object.keys(data.users).length
+            //let usersValues = Object.values(data.users)
 
-            usersTitle.textContent = 'Users (' + [county + 1] + ')'; 
-            //usersUl.textContent = '' + data.users + ''; 
-            usersUl.textContent = Object.values(data.users)
+            usersTitle.textContent = 'Users (' + county + ')'; 
+            //usersUl.textContent = '' + data.users + '';
+
+            usersUl.textContent =  Object.values(data.users);
+
+            //console.log(usersValues);
+
+            alert(data.userWhoConnected + ' entrou no chat')
+
         });
 
         socket.on('disconnection', function(data) {
@@ -133,6 +140,9 @@
 
 
             console.log(data.users)
+
+            //alert(data.userWhoDisconnected + ' saiu do chat')
+
         });
 
         socket.on('chat message', function(obj) {

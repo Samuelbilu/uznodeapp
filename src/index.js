@@ -59,14 +59,17 @@ io.on('connection', (socket) => {
             console.log("o erro foi: " + err)
         });*/
 
-        io.emit('displayUsers', { users: users })
-
-
         users[socket.id] = data.username
 
-        console.log(users)
+        socket.emit('displayUsers', { users: users, userWhoConnected: data.username })
+
+        
+
+        //console.log(io.sockets.sockets)
     });
 
+
+    
     socket.on('chat message', (data) => {
         const messagedb = new Msg({
             username: data.username,
@@ -84,7 +87,8 @@ io.on('connection', (socket) => {
     socket.on('disconnect', function() {
         try{
             delete users[socket.id]
-            io.emit('disconnection', {users: users})
+        socket.emit('disconnection', { users: users/*, userWhoDisconnected: data.username*/ })
+        //io.emit('disconnection', {users: users})
         }
         catch(err){
             console.log(err)

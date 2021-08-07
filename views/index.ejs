@@ -118,6 +118,11 @@
             };
         });*/
 
+        socket.on("connection", ()=>{
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+
         socket.on("displayUsers", function(data){
             let county = Object.keys(data.users).length
             let usersValues = Object.values(data.users)
@@ -156,8 +161,8 @@
             let item = document.createElement('li');
             item.textContent = obj.msgstring
 
-            messages.appendChild(nameP);
-            messages.appendChild(item);
+            messages.textContent = nameP;
+            messages.textContent = item;
             window.scrollTo(0, document.body.scrollHeight);
         });
 

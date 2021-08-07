@@ -106,7 +106,7 @@
                 data.forEach(message => {
                     appendUsers(message.username)
                     appendMessages(message.msgstring)
-
+                    appendAlertMessages()
                 });
             };
             window.scrollTo(0, document.body.scrollHeight);

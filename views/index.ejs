@@ -86,7 +86,6 @@
 
 
 
-        window.scrollTo(0, document.body.scrollHeight);
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -103,13 +102,15 @@
         socket.emit('disconnection', {username: name});
 
         socket.on('output-messages', data => {
-            console.log(data)
             if (data.length) {
                 data.forEach(message => {
                     appendUsers(message.username)
                     appendMessages(message.msgstring)
+
                 });
             };
+            window.scrollTo(0, document.body.scrollHeight);
+
         });
 
         /*socket.on('output-users', data => {

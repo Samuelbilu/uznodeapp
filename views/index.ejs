@@ -161,8 +161,8 @@
             let item = document.createElement('li');
             item.textContent = obj.msgstring
 
-            messages.textContent = nameP;
-            messages.textContent = item;
+            messages.appendChild(nameP);
+            messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
 

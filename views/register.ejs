@@ -27,10 +27,17 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
         crossorigin="anonymous"
     ></script>
+    <script>
+        var username = localStorage.getItem('username')
+
+        if(username !== ''){
+            location.assign('/')
+        }
+    </script>
 </head>
 <body>
     <div class="logindiv">
-        <form class="loginform" action="/auth/register" method="POST">
+        <form id='form' class="loginform" action="/auth/register" method="POST">
             <h3>REGISTER</h3>
             <div class="mb-3">
                 <label class="form-label">Username</label>
@@ -41,7 +48,9 @@
                 <input name="password" type="password" class="form-control" id="password">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
+            Is already registered? <a href="/login">Login</a>
         </form>
     </div>
+    
 </body>
 </html>

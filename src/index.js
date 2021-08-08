@@ -1,20 +1,19 @@
-//requires
 const favicon = require("serve-favicon");
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const { Msg } = require('./models/message');
-//const { User } = require('./models/user');
 const app = express();
 const http = require('http');
 const server = http.createServer(app)
 
-
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
-
 app.use(require("./routes/index"));
+
+require('./controllers/authController')(app)
+
 //socket.io
 
 const { Server } = require("socket.io");

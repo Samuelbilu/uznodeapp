@@ -7,13 +7,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-    //res.render("login.ejs");
-    res.send("página em teste");
+    res.render("login.ejs");
 });
 
 router.get("/register", (req, res) => {
-    //res.render("register.ejs");
-    res.send("pagina em teste");
+    res.render("register.ejs");
 });
 
 module.exports = router;

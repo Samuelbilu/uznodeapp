@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
 
     if(!await bcrypt.compare(password, user.password)){
         return res.send('Invalid password');
-
+        res.render('invalidLogin.ejs');
     }
     res.render('redirectLogin.ejs');
 

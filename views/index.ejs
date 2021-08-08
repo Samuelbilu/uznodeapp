@@ -58,9 +58,12 @@
         }
     </style>
     <script>
-        localStorage.setItem('username', '')
-
         var username = localStorage.getItem('username')
+        if(!username){
+            localStorage.setItem('username', '')
+
+            location.reload()
+        }
 
         if(username == ''){
             location.assign('/login')

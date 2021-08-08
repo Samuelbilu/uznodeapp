@@ -9,8 +9,8 @@ router.post('/register', async (req, res) => {
 
     try{
         if(await User.findOne({ username })){
-        return res.send('User already exists');
-
+            return res.send('User already exists');
+            
         }
         const user = await User.create(req.body);
 
@@ -33,6 +33,7 @@ router.post('/login', async (req, res) => {
 
     if(!user){
         return res.send('User not found');
+        res.render('invalidLogin.ejs');
 
     }
 

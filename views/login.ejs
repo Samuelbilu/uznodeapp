@@ -52,16 +52,18 @@
             Isn't registered yet? <a href="/register">register</a>
         </form>
     </div>
-
     <script>
-        var user = document.getElementById('user')
-        var form = document.getElementById('form')
+        var user = document.getElementById('user');
+        var form = document.getElementById('form');
 
-        form.addEventListener('submit', function() {
-            if  (user.value) {
-                localStorage.setItem('username', user.value)
+        form.addEventListener('submit', ()=>{
+            if(user.value){
+                localStorage.setItem('username', user.value);
+            }else{
+                alert('Invalid Username')
+                location.assign('/login')
             }
-        });
+        })
     </script>
 </body>
 </html>

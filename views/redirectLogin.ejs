@@ -13,7 +13,8 @@
         const username = localStorage.getItem('username')
 
 
-        const user = await User.findOne({ username });
+
+        const user = User.findOne({ username });
 
         if(!user){
             localStorage.setItem('username', '')

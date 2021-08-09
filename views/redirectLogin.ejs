@@ -7,14 +7,7 @@
 </head>
 <body>
     <script>
-        const { User } = require('../models/user');
-
-
         const username = localStorage.getItem('username')
-
-
-
-        const user = User.findOne({ username });
 
         if(!user){
             localStorage.setItem('username', '')

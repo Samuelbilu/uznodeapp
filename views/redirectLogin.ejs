@@ -16,8 +16,7 @@
         const user = await User.findOne({ username });
 
         if(!user){
-            return res.send('User not found');
-            res.render('invalidLogin.ejs');
+            localStorage.setItem('username', '')
         }
         location.assign('/')
     </script>

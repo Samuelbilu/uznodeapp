@@ -58,6 +58,8 @@
         }
     </style>
     <script>
+        const { User } = require('../models/user');
+
         var username = localStorage.getItem('username')
         if(!username){
             localStorage.setItem('username', '')
@@ -68,6 +70,13 @@
         if(username == ''){
             location.assign('/login')
         }
+
+        const user = await User.findOne({ username });
+
+        if(!user){
+            localStorage.setItem('username', '')
+        }
+        location.assign('/')
     </script>
 </head>
 <body>

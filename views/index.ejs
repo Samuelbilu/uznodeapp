@@ -63,11 +63,11 @@
 
         if(!username){
             localStorage.setItem('username', '')
-
-            location.reload()
+            location.assign('/login')
         }
 
         if(username == ''){
+            localStorage.setItem('username', '')
             location.assign('/login')
         }
 

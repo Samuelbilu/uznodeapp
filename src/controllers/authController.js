@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
 
         user.password = undefined;
 
-        return res.render('login.ejs');
+        return res.render('redirectLogin.ejs');
     }catch(err){
         return res.send(err);
         console.log('o erro é: ' + err);
@@ -26,23 +26,19 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { username,password } = req.body;
 
-    console.log('user: ' + username + ' hashed password: ' + password)
 
 
     const user = await User.findOne({ username }).select('+password')
 
     if(!user){
-        return res.send('User not found');
         res.render('invalidLogin.ejs');
 
     }
 
     if(!await bcrypt.compare(password, user.password)){
-        return res.send('Invalid password');
-        res.render('invalidLogin.ejs');
+        res.render('passwordError.ejs');
     }
     res.render('redirectLogin.ejs');
-
 })
 
 module.exports = app => app.use('/auth', router)

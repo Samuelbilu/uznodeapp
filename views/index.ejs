@@ -79,10 +79,13 @@
     </div>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      //<input id="input" autocomplete="off" /><button>Send</button>
+
+      <h1>você foi banido</h1>h1>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
         var name = localStorage.getItem('username');
 
         var socket = io();
@@ -93,7 +96,6 @@
         var form = document.getElementById('form');
         var input = document.getElementById('input');
         var sair = document.getElementById('sair');
-
 
         sair.onclick = function() {
             localStorage.setItem('username', '');
@@ -109,7 +111,9 @@
                     username: name,
                     msgstring: input.value
                 });
+
                 input.value = '';
+
             }
         });
 
@@ -130,6 +134,8 @@
             window.scrollTo(0, document.body.scrollHeight);
         });
 
+        socket.on('msgsCounty', result => console.log(points))
+
         /*socket.on('output-users', data => {
             console.log(data)
             if (data.length) {
@@ -143,6 +149,7 @@
             let county = Object.keys(data.users).length
             let usersValues = Object.values(data.users)
 
+
             usersTitle.textContent = 'Users (' + county + ')'; 
             //usersUl.textContent = '' + data.users + '';
 
@@ -151,8 +158,6 @@
             usersUl.textContent = ""
 
             usersValues.forEach(appendUsersTab)
-
-
         });
 
         socket.on('disconnection', function(data) {
@@ -166,6 +171,7 @@
             usersUl.textContent = ""
 
             usersValues.forEach(appendUsersTab)
+            
 
         });
 
@@ -182,8 +188,12 @@
             window.scrollTo(0, document.body.scrollHeight);
         });
 
+        function points(item) {
+            console.log(Object.keys(item==name).length)
+        }
+
         function appendUsersTab(item) {
-            const html = item + '<br>'
+            const html = `<p id="${item}">${item}</p>`
             usersUl.innerHTML += html
         }
 

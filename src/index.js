@@ -42,6 +42,7 @@ io.on('connection', (socket) => {
 
     Msg.find().then(result => {
         socket.emit('output-messages', result)
+        socket.emit('msgsCounty', result)
     })
 
     /*User.find().then(result => {
@@ -58,10 +59,11 @@ io.on('connection', (socket) => {
             console.log("o erro foi: " + err)
         });*/
 
-        users[socket.id] = data.username
+        users[data.username] = data.username
 
         io.emit('displayUsers', { users: users, userWhoConnected: data.username })
 
+        console.log(users)
         
 
     });

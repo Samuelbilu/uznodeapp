@@ -61,7 +61,7 @@
         var username = localStorage.getItem('username')
         
 
-        if(username = false){
+        if(!username){
             localStorage.setItem('username', '')
             location.assign('/login')
         }

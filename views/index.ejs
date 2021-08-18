@@ -72,13 +72,15 @@
         <ul id="users"></ul>
         <a id="sair">logout</a>
     </div>
-    <ul id="messages"><h1 class="namep fixed">Your username is <%- userName %><h1></h1></ul>
+    <ul id="messages"></ul>
+    <ul id="yourUser"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
 
+        const userMessages = {}
         var name = "<%=userName%>";
 
         var socket = io();
@@ -89,6 +91,11 @@
         var form = document.getElementById('form');
         var input = document.getElementById('input');
         var sair = document.getElementById('sair');
+        var yourUser = document.getElementById('yourUser');
+        
+        
+        yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p>"
+        
 
         sair.onclick = function() {
             name = ''
@@ -103,7 +110,19 @@
                     username: name,
                     msgstring: input.value
                 });
+                try{
+                
+                let county = Object.keys(userMessages).length
+                let userMessagesValues = Object.values(userMessages)
+                userMessages[county + 1] = input.value
+                county = county + 1
+                yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p>"
 
+                console.log(county)
+                }
+                catch(err){
+                console.log(err)
+                }
                 input.value = '';
 
             }
@@ -125,8 +144,6 @@
             }
             window.scrollTo(0, document.body.scrollHeight);
         });
-
-        socket.on('msgsCounty', result => console.log(points))
 
         /*socket.on('output-users', data => {
             console.log(data)
@@ -180,8 +197,10 @@
             window.scrollTo(0, document.body.scrollHeight);
         });
 
-        function points(item) {
-            console.log(Object.keys(item==name).length)
+        function appendPoints(item) {
+            const html = 'Your username is '+ name + ' with '+  item + ' points!';
+
+            yourUser.textContent = html
         }
 
         function appendUsersTab(item) {

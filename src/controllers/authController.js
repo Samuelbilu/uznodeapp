@@ -1,7 +1,7 @@
 const express = require('express');
+const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const { User } = require('../models/user');
-
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
@@ -31,14 +31,30 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username }).select('+password')
 
     if(!user){
-        res.render('invalidLogin.ejs');
+        req.session.userName = ''
 
+        res.send(`
+            Invalid login
+            <a href='/'>retry</a>
+        `);
     }
 
     if(!await bcrypt.compare(password, user.password)){
-        res.render('passwordError.ejs');
+        req.session.userName = ''
+
+        res.send(`
+            Invalid login
+            <a href='/'>retry</a>
+        `);
     }
-    res.render('redirectLogin.ejs');
+
+    req.session.userName = username
+
+    console.log(req.session.userName)
+
+    res.send(`
+        <script>location.assign('/')</script>
+    `);
 })
 
 module.exports = app => app.use('/auth', router)

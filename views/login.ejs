@@ -27,14 +27,6 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
         crossorigin="anonymous"
     ></script>
-
-    <script>
-        var username = localStorage.getItem('username')
-
-        if(username && username !== ''){
-            location.assign('/')
-        }
-    </script>
 </head>
 <body>
     <div class="logindiv">
@@ -52,20 +44,5 @@
             Isn't registered yet? <a href="/register">register</a>
         </form>
     </div>
-    <script>
-        var user = document.getElementById('user');
-        var form = document.getElementById('form');
-
-        form.addEventListener('submit', ()=>{
-            if(user.value){
-                localStorage.setItem('username', user.value)
-                location.assign('/auth/login')
-
-            }else{
-                alert('Invalid Username')
-                location.assign('/login')
-            }
-        })
-    </script>
 </body>
 </html>

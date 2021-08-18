@@ -7,14 +7,7 @@
 </head>
 <body>
     <script>
-        const username = localStorage.getItem('username')
-
-        if(!username){
-            localStorage.setItem('username', '')
-            location.assign('/login')
-
-        }
-        location.assign('/')
+        location.assign('/login')
     </script>
 </body>
 </html>

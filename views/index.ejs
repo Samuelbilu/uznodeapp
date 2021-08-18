@@ -56,20 +56,15 @@
         .usersH1{
             text-align: center;
         }
+        .fixed{
+            backdrop-filter: blur(50px);
+            background: rgba(0, 0, 0, 0.15);
+            top: 0;
+            right: 0;
+            left: 15%;
+            position: fixed;
+        }
     </style>
-    <script>
-        var username = localStorage.getItem('username')
-        
-
-        if(!username){
-            localStorage.setItem('username', '')
-            location.assign('/login')
-        }
-
-        if(username == ''){
-            location.assign('/login')
-        }
-    </script>
 </head>
 <body>
     <div id="usersOnline">
@@ -77,14 +72,14 @@
         <ul id="users"></ul>
         <a id="sair">logout</a>
     </div>
-    <ul id="messages"></ul>
+    <ul id="messages"><h1 class="namep fixed">Your username is <%- userName %><h1></h1></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
+    <script type="text/javascript">
 
-        var name = localStorage.getItem('username');
+        var name = "<%=userName%>";
 
         var socket = io();
 
@@ -96,9 +91,8 @@
         var sair = document.getElementById('sair');
 
         sair.onclick = function() {
-            localStorage.setItem('username', '');
-
-            location.reload()
+            name = ''
+            location.assign('/login')
         }
 
 
@@ -215,6 +209,6 @@
             const html = `<h3 class="namep">↓ Seja o primeiro a mandar uma mensagem! ↓</h3>`
             messages.innerHTML += html
         }
-    </script>
+    </script>%>
 </body>
 </html>

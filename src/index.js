@@ -1,6 +1,7 @@
 const favicon = require("serve-favicon");
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const { Msg } = require('./models/message');
@@ -11,6 +12,15 @@ const server = http.createServer(app)
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(require("./routes/index"));
+app.use(session({
+    secret: 'asdafdg-sdgasdfasdf-fghdjktryu',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 // um dia
+    }
+}));
+
 
 require('./controllers/authController')(app)
 
@@ -32,9 +42,31 @@ mongoose.connect(mongoDB || 'mongodb://localhost/chatdb', { useNewUrlParser: tru
     console.log("erro: " + err); 
 });
 
+// get /
+
+app.get("/", (req, res) => {
+    
+
+    if(req.session.userName == ''){
+        res.send(`
+        <script>
+            location.assign('/login')
+        </script>
+        `)
+    }
+    if(!req.session.userName){
+        req.session.userName == ''
+        res.send(`
+        <script>
+            location.assign('/login')
+        </script>
+        `)
+    }else{
+        res.render('index.ejs', { userName: req.session.userName });
+    }
+});
+
 //socket.io
-
-
 
 const users = {};
 

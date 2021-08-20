@@ -64,6 +64,26 @@
             left: 15%;
             position: fixed;
         }
+        .getCoinsButton{
+            top: 0;
+            background: rgb(122, 122, 122);
+            border-color: black;
+            border-width: 2px;
+            border-radius: 10px;
+            right: 0;
+            padding: 0.5rem 1rem;
+            position: fixed;
+        }
+        .editButton{
+            top: 0;
+            background: rgb(122, 122, 122);
+            border-color: black;
+            border-width: 2px;
+            border-radius: 10px;
+            right: 110px;
+            padding: 0.5rem 1rem;
+            position: fixed;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +94,8 @@
     </div>
     <ul id="messages"></ul>
     <ul id="yourUser"></ul>
+    <button id='getCoins' class='getCoinsButton'>Get coins</button>
+    <button id='getCoins' class='editButton'>Edit Profile</button>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
@@ -94,7 +116,7 @@
         var yourUser = document.getElementById('yourUser');
         
         
-        yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p>"
+        yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p> "
         
 
         sair.onclick = function() {
@@ -106,10 +128,6 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if  (input.value) {
-                socket.emit('chat message', {
-                    username: name,
-                    msgstring: input.value
-                });
                 try{
                 
                 let county = Object.keys(userMessages).length
@@ -123,12 +141,18 @@
                 catch(err){
                 console.log(err)
                 }
+                socket.emit('chat message', {
+                    username: name,
+                    msgstring: input.value,
+                    points: Object.keys(userMessages).length
+                });
+                
                 input.value = '';
 
             }
         });
 
-        socket.emit('userConnected', {username: name});
+        socket.emit('userConnected', {username: name , points: Object.keys(userMessages).length });
         socket.emit('disconnection', {username: name});
 
         socket.on('output-messages', data => {
@@ -187,7 +211,7 @@
         socket.on('chat message', function(obj) {
             let nameP = document.createElement('p');
             nameP.className = "namep"
-            nameP.textContent = obj.username + ":";
+            nameP.textContent = obj.username + " (" + obj.points + ") points" + ":";
             
             let item = document.createElement('li');
             item.textContent = obj.msgstring

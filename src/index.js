@@ -42,6 +42,72 @@ mongoose.connect(mongoDB || 'mongodb://localhost/chatdb', { useNewUrlParser: tru
     console.log("erro: " + err); 
 });
 
+
+
+//socket.io
+
+const users = {};
+const usersPoints = {};
+
+io.on('connection', (socket) => {
+
+    Msg.find().then(result => {
+        socket.emit('output-messages', result)
+    })
+
+    /*User.find().then(result => {
+        socket.emit('output-users', result)
+    })*/
+
+    socket.on('userConnected', (data) => {
+        /*const userdb = new User({
+            username: data.username
+        });
+        userdb.save().then(()=>{
+            io.emit('displayUsers', data)
+        }).catch(err =>{
+            console.log("o erro foi: " + err)
+        });*/
+        
+
+        users[data.username] = data.username
+        usersPoints[data.username+"Points"] = data.points
+
+        io.emit('displayUsers', { users: users, userWhoConnected: data.username, userPoints: data.points })
+
+        console.log(usersPoints)
+        
+        
+
+    });
+
+
+    
+    socket.on('chat message', (data) => {
+        const messagedb = new Msg({
+            username: data.username,
+            msgstring: data.msgstring
+        });
+        messagedb.save().then(()=>{
+            io.emit('chat message', data)
+            usersPoints[data.username+"Points"] = data.points
+        }).catch(err =>{
+            console.log("o erro foi: " + err)
+        });
+    });
+
+
+    socket.on('disconnect', function() {
+        try{
+            delete users[socket.id]
+            io.emit('disconnection', { users: users})
+        }
+        catch(err){
+            console.log(err)
+        }
+    });
+});
+// io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 // get /
 
 app.get("/", (req, res) => {
@@ -64,71 +130,8 @@ app.get("/", (req, res) => {
     }else{
         res.render('index.ejs', { userName: req.session.userName });
     }
+
 });
-
-//socket.io
-
-const users = {};
-
-io.on('connection', (socket) => {
-
-    Msg.find().then(result => {
-        socket.emit('output-messages', result)
-        socket.emit('msgsCounty', result)
-    })
-
-    /*User.find().then(result => {
-        socket.emit('output-users', result)
-    })*/
-
-    socket.on('userConnected', (data) => {
-        /*const userdb = new User({
-            username: data.username
-        });
-        userdb.save().then(()=>{
-            io.emit('displayUsers', data)
-        }).catch(err =>{
-            console.log("o erro foi: " + err)
-        });*/
-
-        users[data.username] = data.username
-
-        io.emit('displayUsers', { users: users, userWhoConnected: data.username })
-
-        console.log(users)
-        
-
-    });
-
-
-    
-    socket.on('chat message', (data) => {
-        const messagedb = new Msg({
-            username: data.username,
-            msgstring: data.msgstring
-        });
-        messagedb.save().then(()=>{
-            io.emit('chat message', data)
-        }).catch(err =>{
-            console.log("o erro foi: " + err)
-        });
-        console.log(data)
-    });
-
-
-    socket.on('disconnect', function() {
-        try{
-            delete users[socket.id]
-            io.emit('disconnection', { users: users})
-        }
-        catch(err){
-            console.log(err)
-        }
-        console.log(users)
-    });
-});
-// io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
-
 //universal
 
 

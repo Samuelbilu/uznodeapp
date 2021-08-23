@@ -128,7 +128,41 @@ app.get("/", (req, res) => {
         </script>
         `)
     }else{
-        res.render('index.ejs', { userName: req.session.userName });
+        if(!req.session.nickname){
+            req.session.nickname = req.session.userName
+        }
+        if(req.session.nickname == ''){
+            req.session.nickname = req.session.userName
+        }
+        res.render('index.ejs', { userName: req.session.userName, nickname: req.session.nickname, sessionPoints: req.session.points });
+    }
+
+});
+app.get("/edit", (req, res) => {
+    
+
+    if(req.session.userName == ''){
+        res.send(`
+        <script>
+            location.assign('/login')
+        </script>
+        `)
+    }
+    if(!req.session.userName){
+        req.session.userName == ''
+        res.send(`
+        <script>
+            location.assign('/login')
+        </script>
+        `)
+    }else{
+        if(!req.session.nickname){
+            req.session.nickname = req.session.userName
+        }
+        if(req.session.nickname == ''){
+            req.session.nickname = req.session.userName
+        }
+        res.render('editProfile.ejs', { userName: req.session.userName, nickname: req.session.nickname, sessionPoints: req.session.points });
     }
 
 });

@@ -94,16 +94,18 @@
     </div>
     <ul id="messages"></ul>
     <ul id="yourUser"></ul>
-    <button id='getCoins' class='getCoinsButton'>Get coins</button>
-    <button id='getCoins' class='editButton'>Edit Profile</button>
+    <a href="#"></a><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
+    <a href="#"><button id='getCoins' class='editButton'>Edit Profile</button></a>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-
+        alert("Acessórios, moedas ou pontos expiram a cada 24 horas! (a não ser que tu sejas um adm)")
         const userMessages = {}
-        var name = "<%=userName%>";
+        var name = "<%=nickname%>";
+        var userName = "<%=userName%>";
+        var sessionPoints = "<%=sessionPoints%>";
 
         var socket = io();
 
@@ -135,7 +137,7 @@
                 userMessages[county + 1] = input.value
                 county = county + 1
                 yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p>"
-
+                sessionPoints = county
                 console.log(county)
                 }
                 catch(err){
@@ -211,7 +213,7 @@
         socket.on('chat message', function(obj) {
             let nameP = document.createElement('p');
             nameP.className = "namep"
-            nameP.textContent = obj.username + " (" + obj.points + ") points" + ":";
+            nameP.textContent = obj.username + " (" + sessionPoints + ") points" + ":";
             
             let item = document.createElement('li');
             item.textContent = obj.msgstring
@@ -252,6 +254,6 @@
             const html = `<h3 class="namep">↓ Seja o primeiro a mandar uma mensagem! ↓</h3>`
             messages.innerHTML += html
         }
-    </script>%>
+    </script>
 </body>
 </html>

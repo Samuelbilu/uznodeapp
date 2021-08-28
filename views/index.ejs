@@ -94,8 +94,8 @@
     </div>
     <ul id="messages"></ul>
     <ul id="yourUser"></ul>
-    <a href="/edit"></a><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
-    <a href="#"><button id='getCoins' class='editButton'>Edit Profile</button></a>
+    <a href="#"><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
+    <a href="/edit"><button id='getCoins' class='editButton'>Edit Profile</button></a>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
@@ -116,6 +116,7 @@
         var input = document.getElementById('input');
         var sair = document.getElementById('sair');
         var yourUser = document.getElementById('yourUser');
+        var editProfile = document.getElementsByClassName('editButton');
         
         
         yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p> "
@@ -123,6 +124,12 @@
 
         sair.onclick = function() {
             name = ''
+            socket.disconnect()
+            location.assign('/login')
+        }
+        editProfile.onclick = function() {
+            name = ''
+            socket.disconnect()
             location.assign('/login')
         }
 

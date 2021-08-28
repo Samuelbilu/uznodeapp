@@ -94,7 +94,7 @@
     </div>
     <ul id="messages"></ul>
     <ul id="yourUser"></ul>
-    <a href="#"></a><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
+    <a href="/edit"></a><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
     <a href="#"><button id='getCoins' class='editButton'>Edit Profile</button></a>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -137,7 +137,7 @@
                 userMessages[county + 1] = input.value
                 county = county + 1
                 yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p>"
-                sessionPoints = county
+                sessionPoints = Object.keys(userMessages).length
                 console.log(county)
                 }
                 catch(err){

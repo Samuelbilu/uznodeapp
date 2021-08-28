@@ -166,6 +166,18 @@ app.get("/edit", (req, res) => {
     }
 
 });
+
+app.post('/edit', (req, res) =>{
+    const { newNickname } = req.body;
+
+    req.session.nickname = newNickname
+    res.send(`
+    <script>
+        location.assign('/')
+    </script>
+    `)
+
+})
 //universal
 
 

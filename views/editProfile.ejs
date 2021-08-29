@@ -90,13 +90,13 @@
 <body>
     
     <ul id="yourUser"></ul>
-    <a href="#"></a><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
+    <form action="/get/coins" method="post"><button id='getCoins' class='getCoinsButton' type="submit">Get coins</button></form>
     <div class="logindiv">
         <form id="form" class="loginform" action="/edit" method="POST">
             <h3>Edit profile</h3>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Edit nickname</label>
-                <input type="text" class="form-control" id="user" aria-describedby="emailHelp" name="newNickname">
+                <input type="text" class="form-control" id="input" aria-describedby="emailHelp" name="newNickname">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -118,6 +118,7 @@
         var form = document.getElementById('form');
         var input = document.getElementById('input');
         var sair = document.getElementById('sair');
+        var user = document.getElementById('user');
         var yourUser = document.getElementById('yourUser');
 
         if(!sessionPoints){
@@ -135,6 +136,9 @@
             location.assign('/login')
         }
 
+        form.addEventListener('submit', (e)=>{
+            socket.emit('profileEdit', {editedNewNickname: input.value})
+        })
         document.write(sessionPoints)
     </script>
 </body>

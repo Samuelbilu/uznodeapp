@@ -84,6 +84,17 @@
             padding: 0.5rem 1rem;
             position: fixed;
         }
+
+        .savePointsButton{
+            top: 0;
+            background: rgb(122, 122, 122);
+            border-color: black;
+            border-width: 2px;
+            border-radius: 10px;
+            right: 230px;
+            padding: 0.5rem 1rem;
+            position: fixed;
+        }
     </style>
 </head>
 <body>
@@ -94,8 +105,12 @@
     </div>
     <ul id="messages"></ul>
     <ul id="yourUser"></ul>
-    <a href="#"><button id='getCoins' class='getCoinsButton'>Get coins</button></a>
-    <a href="/edit"><button id='getCoins' class='editButton'>Edit Profile</button></a>
+    <form action="/get/coins" method="post"><button id='getCoins' class='getCoinsButton' type="submit">Get coins</button></form>
+    <form action="/save/points" method="post" id="savePointsForm">
+        <input type="hidden" name="userSessionPoints" id="userSessionPoints" />
+        <button id='savePoints' class='savePointsButton' type="submit">Save points</button>
+    </form>
+    <a><button id='editProfile' class='editButton'>Edit Profile</button></a>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
@@ -116,21 +131,24 @@
         var input = document.getElementById('input');
         var sair = document.getElementById('sair');
         var yourUser = document.getElementById('yourUser');
-        var editProfile = document.getElementsByClassName('editButton');
+        var editProfile = document.getElementById('editProfile');
+        var userSessionPoints = document.getElementById('userSessionPoints');
+        var savePointsForm = document.getElementById('savePointsForm');
+
+        userSessionPoints.value = Object.keys(userMessages).length
         
-        
-        yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p> "
-        
+        yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ userSessionPoints.value +" points!</p> "
+        //if(prompt('sodigjsfughiufsdfduhfdhsdfhufuhfshfdhudsiufhsdifuhsiudhfisudhfiushdifhsiudhfisuhdfishdfiushdifuhsidufhsiudhfsiudhfi2345')){
+        //    socket.emit('disconnectServer')
+
+        //}
 
         sair.onclick = function() {
             name = ''
-            socket.disconnect()
             location.assign('/login')
         }
         editProfile.onclick = function() {
-            name = ''
-            socket.disconnect()
-            location.assign('/login')
+            location.assign('/edit')
         }
 
 
@@ -143,8 +161,8 @@
                 let userMessagesValues = Object.values(userMessages)
                 userMessages[county + 1] = input.value
                 county = county + 1
-                yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ Object.keys(userMessages).length +" points!</p>"
-                sessionPoints = Object.keys(userMessages).length
+                yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ userSessionPoints.value +" points!</p>"
+                userSessionPoints.value = sessionPoints
                 console.log(county)
                 }
                 catch(err){
@@ -153,15 +171,15 @@
                 socket.emit('chat message', {
                     username: name,
                     msgstring: input.value,
-                    points: Object.keys(userMessages).length
+                    points: sessionPoints
                 });
                 
                 input.value = '';
-
+                
             }
         });
 
-        socket.emit('userConnected', {username: name , points: Object.keys(userMessages).length });
+        socket.emit('userConnected', {username: name , points: sessionPoints });
         socket.emit('disconnection', {username: name});
 
         socket.on('output-messages', data => {
@@ -213,6 +231,7 @@
             usersUl.textContent = ""
 
             usersValues.forEach(appendUsersTab)
+            sessionPoints = Object.keys(userMessages).length
             
 
         });

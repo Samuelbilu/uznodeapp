@@ -106,6 +106,18 @@ io.on('connection', (socket) => {
             console.log(err)
         }
     });
+    socket.on('profileEdit', function(data) {
+        try{
+            users[socket.id] = data.editedNewNickname
+            io.emit('displayUsers', { users: users, userWhoConnected: data.editedNewNickname, userPoints: data.points })
+        }
+        catch(err){
+            console.log(err)
+        }
+    });
+    socket.on('disconnectServer', function() {
+        io.disconnectSockets()
+    });
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
 // get /
@@ -177,6 +189,30 @@ app.post('/edit', (req, res) =>{
     </script>
     `)
 
+})
+
+app.post('/save/points', (req, res) =>{
+    let { userSessionPoints } = req.body
+    req.session.points = userSessionPoints
+    res.send(`
+    <script>
+        location.assign('/')
+        
+    </script>
+    `)
+    console.log(req.session.points)
+})
+
+app.post('/get/coins', (req, res) =>{
+
+    req.session.coins = req.session.points
+    res.send(`
+    <script>
+        console.log(${req.session.coins})
+        location.assign('/')
+    </script>
+    `)
+    
 })
 //universal
 

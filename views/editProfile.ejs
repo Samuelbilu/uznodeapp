@@ -137,9 +137,13 @@
         }
 
         form.addEventListener('submit', (e)=>{
-            socket.emit('profileEdit', {editedNewNickname: input.value})
+            //socket.emit('profileEdit', {editedNewNickname: input.value})
+            socket.emit('nick edit', {nick: userName, newNick: input.value})
         })
-        document.write(sessionPoints)
+
+        
+
+
     </script>
 </body>
 </html>

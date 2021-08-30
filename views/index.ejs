@@ -44,6 +44,14 @@
             background-color: rgb(255, 255, 255);
             font-size: 25px;
         }
+        .namep3{
+            margin:0;
+            margin-top: 40px;
+            padding: 0.5rem 1rem;
+            color: rgb(10, 10, 10);
+            background-color: rgb(180, 180, 180);
+            font-size: 20px;
+        }
         #usersOnline{
             position: fixed;
             width: 15%;
@@ -123,7 +131,6 @@
         var sessionPoints = "<%=sessionPoints%>";
 
         var socket = io();
-
         var messages = document.getElementById('messages');
         var usersUl = document.getElementById('users');
         var usersTitle = document.getElementById('usersH1');
@@ -135,9 +142,14 @@
         var userSessionPoints = document.getElementById('userSessionPoints');
         var savePointsForm = document.getElementById('savePointsForm');
 
-        userSessionPoints.value = Object.keys(userMessages).length
+        userSessionPoints.value = sessionPoints
         
-        yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ userSessionPoints.value +" points!</p> "
+        if(!sessionPoints){
+            sessionPoints = 0
+        }
+
+
+        yourUser.innerHTML = "<p class='namep fixed'>Your nickname is "+ name +" with "+ userSessionPoints.value +" points!</p> "
         //if(prompt('sodigjsfughiufsdfduhfdhsdfhufuhfshfdhudsiufhsdifuhsiudhfisudhfiushdifhsiudhfisuhdfishdfiushdifuhsidufhsiudhfsiudhfi2345')){
         //    socket.emit('disconnectServer')
 
@@ -146,9 +158,11 @@
         sair.onclick = function() {
             name = ''
             location.assign('/login')
+            //socket.disconnect()
         }
         editProfile.onclick = function() {
             location.assign('/edit')
+            //socket.emit('profile edited', {username: userName})
         }
 
 
@@ -161,8 +175,10 @@
                 let userMessagesValues = Object.values(userMessages)
                 userMessages[county + 1] = input.value
                 county = county + 1
-                yourUser.innerHTML = "<p class='namep fixed'>Your username is "+ name +" with "+ userSessionPoints.value +" points!</p>"
+                sessionPoints = sessionPoints + 1
                 userSessionPoints.value = sessionPoints
+                yourUser.innerHTML = "<p class='namep fixed'>Your nickname is "+ name +" with "+ userSessionPoints.value +" points!</p>"
+                
                 console.log(county)
                 }
                 catch(err){
@@ -179,9 +195,9 @@
             }
         });
 
-        socket.emit('userConnected', {username: name , points: sessionPoints });
-        socket.emit('disconnection', {username: name});
-
+        socket.emit('userConnected', {username: userName, nickname: name, points: sessionPoints });
+        socket.emit('disconnection', {username: userName, nickname: name});
+        //socket.on('logId', data =>{ console.log(data.id) })
         socket.on('output-messages', data => {
             if (data.length) {
                 data.forEach(message => {
@@ -220,6 +236,13 @@
             usersValues.forEach(appendUsersTab)
         });
 
+        /*socket.on("nick edit", function(data){
+            socket.emit('chat message', {
+                username: "System",
+                msgstring: data.nick + " changed his/her nickname to " + data.nickName
+            });
+        });*/
+
         socket.on('disconnection', function(data) {
             let county = Object.keys(data.users).length
             let usersValues = Object.values(data.users)
@@ -231,7 +254,6 @@
             usersUl.textContent = ""
 
             usersValues.forEach(appendUsersTab)
-            sessionPoints = Object.keys(userMessages).length
             
 
         });
@@ -239,7 +261,11 @@
         socket.on('chat message', function(obj) {
             let nameP = document.createElement('p');
             nameP.className = "namep"
-            nameP.textContent = obj.username + " (" + sessionPoints + ") points" + ":";
+            /*if(obj.username = "System"){
+                nameP.textContent = obj.username + ":";
+            }else{*/
+            nameP.textContent = obj.username + " (" + userSessionPoints.value + ") points" + ":";
+            //}
             
             let item = document.createElement('li');
             item.textContent = obj.msgstring
@@ -277,9 +303,14 @@
         }
 
         function appendAlertMessages2() {
-            const html = `<h3 class="namep">↓ Seja o primeiro a mandar uma mensagem! ↓</h3>`
+            const html = `<h3 class="namep3">↓ Seja o primeiro a mandar uma mensagem! ↓</h3>`
             messages.innerHTML += html
         }
+
+        /*function appendAlertMessages3(nick, newnick) {
+            const html = `<h3 class="namep">${nick} changed nickname to ${newnick}</h3>`
+            messages.innerHTML += html
+        }*/
     </script>
 </body>
 </html>

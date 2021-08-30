@@ -70,12 +70,11 @@ io.on('connection', (socket) => {
         });*/
         
 
-        users[data.username] = data.username
+        users[socket.id] = data.nickname
         usersPoints[data.username+"Points"] = data.points
 
-        io.emit('displayUsers', { users: users, userWhoConnected: data.username, userPoints: data.points })
-
-        console.log(usersPoints)
+        io.emit('displayUsers', { users: users, userWhoConnected: data.nickname, userPoints: data.points })
+        io.emit('logId', { users: users, id: socket.id})
         
         
 
@@ -106,17 +105,25 @@ io.on('connection', (socket) => {
             console.log(err)
         }
     });
-    socket.on('profileEdit', function(data) {
+    /*socket.on('profile edited', function(data) {
         try{
-            users[socket.id] = data.editedNewNickname
+            users[data.userName] = data.editedNewNickname
             io.emit('displayUsers', { users: users, userWhoConnected: data.editedNewNickname, userPoints: data.points })
         }
         catch(err){
             console.log(err)
         }
-    });
+    });*/
     socket.on('disconnectServer', function() {
         io.disconnectSockets()
+    });
+    socket.on('nick edit', function(data) {
+        try{
+            io.emit('nick edit', { nick: data.nick, newnick: data.newNick})
+        }
+        catch(err){
+            console.log(err)
+        }
     });
 });
 // io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' })
@@ -212,6 +219,8 @@ app.post('/get/coins', (req, res) =>{
         location.assign('/')
     </script>
     `)
+
+    console.log(req.session.coins)
     
 })
 //universal
